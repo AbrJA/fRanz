@@ -1,7 +1,5 @@
 #include <Rcpp.h>
-#include <rdkafkacpp.h>
-
-
+#include <librdkafka/rdkafkacpp.h>
 
 RdKafka::Conf* MakeKafkaConfig(Rcpp::StringVector keys, Rcpp::StringVector values) {
     std::string errstr;
@@ -16,4 +14,3 @@ RdKafka::Conf* MakeKafkaConfig(Rcpp::StringVector keys, Rcpp::StringVector value
     }
     return conf;
 }
-

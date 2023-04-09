@@ -1,4 +1,4 @@
-#include <rdkafkacpp.h>
+#include <librdkafka/rdkafkacpp.h>
 #include <Rcpp.h>
 #include "utils.h"
 #include <iostream>
@@ -20,7 +20,7 @@ SEXP GetRdProducer(Rcpp::StringVector keys, Rcpp::StringVector values) {
     auto conf = MakeKafkaConfig(keys,values);
     RdKafka::Producer *producer = RdKafka::Producer::create(conf, errstr);
     if(!producer) {
-      Rcpp::stop("Producer creation failed with error: " + errstr); 
+      Rcpp::stop("Producer creation failed with error: " + errstr);
     }
     Rcpp::XPtr<RdKafka::Producer> p(producer, true) ;
     return p;
@@ -37,9 +37,9 @@ SEXP GetRdProducer(Rcpp::StringVector keys, Rcpp::StringVector values) {
 //' @return returns the number of messages succesfully sent
 // [[Rcpp::export]]
 int KafkaProduce(SEXP producer_pointer,
-                 SEXP topic, 
-                 Rcpp::IntegerVector partition, 
-                 Rcpp::StringVector keys, 
+                 SEXP topic,
+                 Rcpp::IntegerVector partition,
+                 Rcpp::StringVector keys,
                  Rcpp::StringVector values) {
     Rcpp::XPtr<RdKafka::Producer> producer(producer_pointer);
     std::string s_topic = Rcpp::as<std::string>(topic);
@@ -54,7 +54,7 @@ int KafkaProduce(SEXP producer_pointer,
     for (int i = 0; i < numMsgs; i++) {
         std::string s_value = Rcpp::as<std::string>(values[i]);
         std::string s_key = Rcpp::as<std::string>(keys[i]);
-    
+
         RdKafka::ErrorCode resp = producer->produce(
             s_topic, partition[0],  RdKafka::Producer::RK_MSG_COPY,
             const_cast<char *>(s_value.c_str()),s_value.size(),

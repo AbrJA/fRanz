@@ -1,4 +1,4 @@
-#include <rdkafkacpp.h>
+#include <librdkafka/rdkafkacpp.h>
 #include <Rcpp.h>
 #include "utils.h"
 #include <iostream>
@@ -23,7 +23,7 @@ SEXP GetRdConsumer(Rcpp::StringVector keys, Rcpp::StringVector values) {
     auto conf = MakeKafkaConfig(keys,values);
     RdKafka::KafkaConsumer *consumer = RdKafka::KafkaConsumer::create(conf, errstr);
     if(!consumer) {
-      Rcpp::stop("Consumer creation failed with error: " + errstr); 
+      Rcpp::stop("Consumer creation failed with error: " + errstr);
     }
     Rcpp::XPtr<RdKafka::KafkaConsumer> p(consumer, true) ;
     return p;
@@ -31,7 +31,7 @@ SEXP GetRdConsumer(Rcpp::StringVector keys, Rcpp::StringVector values) {
 
 //' @title RdSubscribe
 //' @name RdSubscribe
-//' @description A method to register a consumer with a set amount of topics as consumers. 
+//' @description A method to register a consumer with a set amount of topics as consumers.
 //' This is important so the broker can track offsets and register it in a consumer group
 //' @param consumerPtr a reference to a Rcpp::XPtr<RdKafka::KafkaConsumer>
 //' @param Rtopics a character vector listing the topics to subscribe to
@@ -76,9 +76,9 @@ Rcpp::List KafkaConsume(SEXP consumerPtr, int numResults) {
                 printf("Consume failed: %s", msg->errstr().c_str());
                 goto exit_loop;
             }
-        } 
-    }   
+        }
+    }
     exit_loop:;
-    
+
     return messages;
 }
